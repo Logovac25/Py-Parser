@@ -1,0 +1,67 @@
+import requests
+from bs4 import BeautifulSoup
+
+url = "https://stopgame.ru/news"
+headers = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,'
+              '*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/113.0.0.0 Safari/537.36'
+}
+
+
+def get_news_stopgame():
+    req = requests.get(url, headers=headers)
+    soup = BeautifulSoup(req.text, 'lxml')
+    all_news = soup.find_all('a', class_='_title_11mk8_60')
+    all_news_links = ["https://stopgame.ru" + item['href'] for item in all_news]
+    return all_news_links[0]
+
+
+print(get_news_stopgame())
+
+
+def get_news_head_stopgame():
+    req = requests.get(url, headers=headers)
+    soup = BeautifulSoup(req.text, 'lxml')
+    all_news = soup.find_all('a', class_='_title_11mk8_60')
+    all_news_links = ["https://stopgame.ru" + item['href'] for item in all_news]
+    if all_news_links:
+        req1 = requests.get(all_news_links[0], headers=headers)
+        soup1 = BeautifulSoup(req1.text, 'lxml')
+        news_head = soup1.find('h1').text
+        return news_head
+
+
+print(get_news_head_stopgame())
+
+
+def get_news_text_stopgame():
+    req = requests.get(url, headers=headers)
+    soup = BeautifulSoup(req.text, 'lxml')
+    all_news = soup.find_all('a', class_='_title_11mk8_60')
+    all_news_links = ["https://stopgame.ru" + item['href'] for item in all_news]
+    if all_news_links:
+        req1 = requests.get(all_news_links[0], headers=headers)
+        soup1 = BeautifulSoup(req1.text, 'lxml')
+        news_text = [p.text for p in soup1.find_all('p')]
+        return ''.join(news_text)
+
+
+print(get_news_text_stopgame())
+
+
+def get_news_img_stopgame():
+    req = requests.get(url, headers=headers)
+    soup = BeautifulSoup(req.text, 'lxml')
+    all_news = soup.find_all('a', class_='_title_11mk8_60')
+    all_news_links = ["https://stopgame.ru" + item['href'] for item in all_news]
+    if all_news_links:
+        req1 = requests.get(all_news_links[0], headers=headers)
+        soup1 = BeautifulSoup(req1.text, 'lxml')
+        img_news = soup1.find_all('img')
+        news_images = [img['src'] for img in img_news]
+        return news_images[0]
+
+
+print(get_news_img_stopgame())
